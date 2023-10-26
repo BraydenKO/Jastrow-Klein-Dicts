@@ -1,0 +1,1 @@
+print(f"{len(df)} entries")
