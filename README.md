@@ -1,9 +1,10 @@
 # Jastrow-Klein-Dicts
 Contains the Jastrow Dictionary and Klein Dictionary:
 
-- Jastrow, M. (2004). Dictionary of the Targumim, Talmud Bavli, Talmud Yerushalmi and Midrashic literature. Judaica Treasury. 
-
-- Klein, E. (1967). A comprehensive etymological dictionary of the English language. Elsevier. 
+- Jastrow, M. Dictionary of the Targumim, Talmud Bavli, Talmud Yerushalmi and Midrashic literature
+  - [Public Domain](https://en.wikipedia.org/wiki/Public_domain)
+- Klein, E. (1971). A Comprehensive Etymological Dictionary of the English Language. Carta Jerusalem.
+  - [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/) 
 
 ### In data folders:
   Contains both csv and xml version of Jastrow and Klein dictionaries.
