@@ -1,11 +1,13 @@
 import os
 import pandas as pd
 import re
+import unicodedata
+
 fileName = "Greek-Jastrow.csv"
 
 dir = os.path.dirname(__file__) + '/../data/01-Merged XML'
 filePath  = f"{dir}/{fileName}"
-greek_letters = re.compile(r'\b\w*[\u0386-\u03C9\u1F00-\u1FFE\u0300-\u0344]+[-]*\w*\b')
+greek_letters = re.compile(r'\b\w*[\u0386-\u03C9\u1F00-\u1FFE\u0300-\u0306\u0308-\u0344]+[-]*\w*\b')
 
 def load_dfs(*filePaths):
     output = []
@@ -25,7 +27,9 @@ def get_greek_word(df):
 
 def re_organize_df(df, greek_words):
     df["Greek Entry"] = greek_words
-    df = df.sort_values(by="Greek Entry")
+    df['SortKey'] = df["Greek Entry"].apply(lambda x: unicodedata.normalize('NFD', x))
+    df = df.sort_values(by="SortKey")
+    df.drop('SortKey', axis=1, inplace=True)
     df = df.reindex(columns=['Unnamed: 0', 'Greek Entry', 'Entry', 'Definition'])
     return df    
 
