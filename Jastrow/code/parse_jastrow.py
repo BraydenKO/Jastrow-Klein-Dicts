@@ -13,7 +13,7 @@ filePath = f"{data_dir}/{fileName}"
 
 cols = ["Entry", "Definition", "Has_Greek"]
 rows = []
-greek_letters = re.compile(r'[Α-Ωα-ω]')
+greek_letters = re.compile(r'[Α-Ωα-ωὁ]+')
 xmlparse = XeT.parse(filePath)
 root = xmlparse.getroot()
 
