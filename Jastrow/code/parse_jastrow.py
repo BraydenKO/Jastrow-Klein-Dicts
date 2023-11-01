@@ -13,7 +13,8 @@ filePath = f"{data_dir}/{fileName}"
 
 cols = ["Entry", "Definition", "Has_Greek"]
 rows = []
-greek_letters = re.compile(r'[Α-Ωα-ωὁ]+')
+# To identify whether the word is related 
+greek_letters = re.compile(r'\b(?<!-)\w*[Α-Ωα-ωὁ]+\w*\b')
 xmlparse = XeT.parse(filePath)
 root = xmlparse.getroot()
 
@@ -91,5 +92,6 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(rows, columns=cols) 
     df.replace(to_replace=[r"\\t|\\n|\\r", "\t|\n|\r"], value=["",""], regex=True, inplace=True)
+    print(f"{len(df)} Entries")
     # Writing dataframe to csv 
     df.to_csv(f"{data_dir}/Jastrow-full.csv")
