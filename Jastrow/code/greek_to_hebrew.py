@@ -35,7 +35,7 @@ def re_organize_df(df, greek_words,extra_rows):
     df["Greek Entry"] = greek_words
     df = pd.concat([df,pd.DataFrame(extra_rows)],ignore_index=True)
     df['SortKey'] = df["Greek Entry"].apply(lambda x: unicodedata.normalize('NFD', x))
-    df = df.sort_values(by="SortKey")
+    df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop('SortKey', axis=1, inplace=True)
     df = df.reindex(columns=['Unnamed: 0', 'Greek Entry', 'Entry', 'Definition'])
     return df    

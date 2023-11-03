@@ -25,8 +25,7 @@ def tag_roman_word(word):
     replacements = {
         "th": "θ",
         "ph": "φ",
-        "ch": "χ",
-        "ps": "ψ"
+        "ch": "χ"
     }
     for key in replacements.keys():
         if word[:2] == key:
@@ -88,8 +87,8 @@ def sort_words(greekdf, romandf):
     # Sort them
     df = pd.concat([greekdf,romandf])
     df["SortKey"] = df["Greek Entry"].apply(lambda x: unicodedata.normalize("NFD", x))
-    df = df.sort_values(by="SortKey")
-    df.drop("SortKey", axis=1, inplace=True)
+    df = df.sort_values(by="SortKey", kind="mergesort")
+    df.drop("SortKey",axis=1, inplace=True)
 
     df.loc[df["IsRoman"]==True,"Greek Entry"] = df.loc[df["IsRoman"]==True,"Greek Entry"].apply(
         untag_roman_word
