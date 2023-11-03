@@ -24,12 +24,15 @@ def get_greek_word(df):
     extra_rows = []
     for idx in range(len(df)):
         row = df.iloc[idx]
+        # Is >1 and not >=1 to exclude mentions of Gk. t corresponding to Heb tet
         match = list(set( i for i in greek_letters.findall(row["Definition"]) if len(i)>1))
+        # Handle the first match easily by adding to the same row
         try:
             greek_words.append(match[0].lower())
-        except:
+        except: # Doesn't explicitly mention the word, just mentions "Greek"
             greek_words.append("REMOVE")
             continue
+        # later matches need duplicated rows
         for m in match[1:]:
             duplicated_row = row.copy()
             duplicated_row["Greek Entry"] = m.lower()
@@ -42,7 +45,7 @@ def re_organize_df(df, greek_words,extra_rows):
     df = df.drop(df[df["Greek Entry"] == "REMOVE"].index)
     df = pd.concat([df,pd.DataFrame(extra_rows)],ignore_index=True)
     df['SortKey'] = df["Greek Entry"].apply(lambda x: unicodedata.normalize('NFD', x))
-    df = df.sort_values(by="SortKey")
+    df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop('SortKey', axis=1, inplace=True)
     df = df.reindex(columns=['Unnamed: 0', 'Greek Entry', 'Entry', 'Definition'])
     return df
@@ -56,7 +59,3 @@ if __name__ == "__main__":
     greek_words, extra_rows = get_greek_word(df)
     df = re_organize_df(df, greek_words,extra_rows)
     df.to_csv(f"{dir}/Greek-Heb_Aram.csv", index=False)
-
-    for greek in df["Greek Entry"]:
-        if "h" in greek:
-            print(greek)
