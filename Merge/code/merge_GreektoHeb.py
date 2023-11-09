@@ -1,7 +1,7 @@
-import re
 import os
 import pandas as pd
 import unicodedata
+from unidecode import unidecode
 
 fileName = "Greek-Heb_Aram.csv"
 
@@ -16,7 +16,7 @@ def load_dfs(*filePaths):
         output.append(pd.read_csv(path))
     return output if len(output)>1 else output[0]
 
-def tag_roman_word(word):
+def tag_roman_word(word,tag="ωωω"):
     """
     Adds a Greek letter to put the word into proper alpha-omega order.
     Adds an em—dash to make sure the roman spelled words come after greek
@@ -58,12 +58,12 @@ def tag_roman_word(word):
         "ō": "ω",
     }
     if word[0] == "h":
-        return lookup[word[1]] + "—" + word[1:] + "<tag>h"
+        return lookup[word[1]] + tag + word[1:] + "<tag>h"
 
-    return lookup.get(word[0], word[0]) + "—" + word
+    return lookup.get(word[0], word[0]) + tag + word
 
-def untag_roman_word(word):
-    word = word[2:]
+def untag_roman_word(word,tag="ωωω"):
+    word = word[len(tag)+1:]
     if word[-6:] == "<tag>h": # Has a tag
         word = "h" + word[:-6]
     replacements = {
@@ -86,7 +86,7 @@ def sort_words(greekdf, romandf):
     romandf["IsRoman"] = True
     # Sort them
     df = pd.concat([greekdf,romandf])
-    df["SortKey"] = df["Greek Entry"].apply(lambda x: unicodedata.normalize("NFD", x))
+    df["SortKey"] = df["Greek Entry"].apply(lambda x: unidecode(unicodedata.normalize("NFD", x)))
     df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop("SortKey",axis=1, inplace=True)
 
