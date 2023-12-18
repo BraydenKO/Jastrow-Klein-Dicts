@@ -88,6 +88,8 @@ def greekify_entry(entry,lookup):
     # lookup.keys() is read backwards to prioritize the special vowel cases with accents
     pattern = re.compile("|".join(map(re.escape, list(lookup.keys())[::-1])))
     result = pattern.sub(lambda match: lookup[match.group(0)], entry)
+    if result[0] == "*":
+        result = result.title()
     result = result.replace("*","")
     return result
 

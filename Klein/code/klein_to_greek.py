@@ -2,7 +2,7 @@
 import sys
 import os
 sys.path.append(os.path.dirname(__file__) + "/../..")
-
+import time
 import regex
 import pandas as pd
 import unicodedata
@@ -28,21 +28,43 @@ def re_organize_df(df, greek_words,extra_rows):
     return df
 
 
-def greekify(df,LSJ):
+def greekify(df,LSJ,manual_romantogreek):
     greek_entries = []
     is_roman_col = []
+    possible_greeks = []
+    row_count = len(df)
+    start_time = time.time()
+    count = 1
+    print(f"0.00% complete",end="")
     for greek_entry in df["Greek Entry"]:
-        verified_greek, is_roman = in_LSJ.greek_in_LSJ(greek_entry,LSJ)
+        if count%100 == 0:
+            p = 100*count/row_count
+            t = time.time()-start_time
+            e = t*(100/p -1) #t/p = T/100 & T = e + t -> e = t*(100/p - 1)
+            print(f"\r{p:.2f}% complete. {t:.2f}s elapsed. Expected to finish in {e:.2f}s",end="")
+        verified_greek, is_roman, possible_greek = in_LSJ.greek_in_LSJ(greek_entry,LSJ)
         if not is_roman:
             verified_greek = f"{verified_greek} ({greek_entry})"
+        else:
+            manual_greek_entries = manual_romantogreek.loc[manual_romantogreek["Roman Entry"]==verified_greek.lower(), "Greek Entry"]
+            if not manual_greek_entries.empty:
+                # Have to use .iloc because the index isn't always the same number which Series[0] would use.
+                verified_greek = f"{manual_greek_entries.iloc[0]} ({greek_entry})"
+                is_roman = False
+        if greek_entry[0].isupper():
+            verified_greek = verified_greek[0].upper() + verified_greek[1:]
         greek_entries.append(verified_greek)
         is_roman_col.append(is_roman)
+        possible_greeks.append(possible_greek)
+        count +=1
+    print()
 
     df["Greek Entry"] = greek_entries
     df["IsRoman"] = is_roman_col
+    df["PossibleGreek"] = possible_greeks
     return df
 
-def get_greeked_df(df):
+def get_greeked_df(df,manual_romantogreek):
     LSJ = load_dfs(LSJPath)
-    df = greekify(df,LSJ)
+    df = greekify(df,LSJ,manual_romantogreek)
     return df

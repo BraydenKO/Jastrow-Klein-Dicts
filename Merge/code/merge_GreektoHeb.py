@@ -78,6 +78,9 @@ def untag_roman_word(word,tag="ωωω"):
 
     return word
 
+def strip_accents(s):
+   return ''.join(c for c in unicodedata.normalize('NFD', s)
+                  if unicodedata.category(c) != 'Mn')
 
 def sort_words(greekdf, romandf):
     # Prepare Dicts
@@ -86,7 +89,7 @@ def sort_words(greekdf, romandf):
     romandf["IsRoman"] = True
     # Sort them
     df = pd.concat([greekdf,romandf])
-    df["SortKey"] = df["Greek Entry"].apply(lambda x: unidecode(unicodedata.normalize("NFD", x)))
+    df["SortKey"] = df["Greek Entry"].apply(strip_accents)
     df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop("SortKey",axis=1, inplace=True)
 

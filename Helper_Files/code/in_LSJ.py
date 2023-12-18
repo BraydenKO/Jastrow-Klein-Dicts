@@ -74,29 +74,34 @@ def generate_words(word):
     generate_variations("",word)
     return results
 
-def greek_in_LSJ(word,LSJ,heb_word=""):
+
+replacements, lookup = create_lookup()
+pattern_2letter = re.compile("|".join(map(re.escape, replacements.keys())))
+pattern = re.compile("|".join(map(re.escape, lookup.keys())))
+def greek_in_LSJ(word,LSJ):
     """
     Args:
         word (str): A Klein-spelling of a word
     Returns:
         str: The correct greek spelling based on LSJ dict
+            or the original latin version of the word.
+        bool: True if the returned string is the original
+            word. False if the returned string is the greek
+            spelled word.
+        list: A list of the possible greek words if there are
+            multiple candidates. Used by nongreeked_entries.csv
     """
-    replacements, lookup = create_lookup()
-    greek_words = []
     
-    new_word = word
-    if word[0]=="h":
+    new_word = word.lower()
+    
+    if new_word[0]=="h":
         new_word = word[1:]
     
     # Two letter consonants
-    pattern = re.compile("|".join(map(re.escape, replacements.keys())))
-    new_word = pattern.sub(lambda match: replacements[match.group(0)], new_word)
+    new_word = pattern_2letter.sub(lambda match: replacements[match.group(0)], new_word)
 
-    pattern = re.compile("|".join(map(re.escape, lookup.keys())))
     greek_word = pattern.sub(lambda match: lookup[match.group(0)], new_word)
     greek_words = generate_words(greek_word)
-
-    greek_words = list(set(greek_words))
 
     verified_greek_words = []
 
@@ -106,51 +111,9 @@ def greek_in_LSJ(word,LSJ,heb_word=""):
             verified_greek_words.append(match)
     
     if len(verified_greek_words)==0:
-        if len(greek_words)==1: # Even though it wasn't found, it unambiguous
-            return greek_words[0], False
-        # verified_greek_words.append(check_again(word,lookup,LSJ))
-        # if verified_greek_words is None:
-        #     print(f"No greek word found for {word}, {heb_word}: {greek_words}")
-        #     return word, False
-        # else:
-        #     print(verified_greek_words)
-        #     return verified_greek_words[0]
-        return word, True
-    elif len(verified_greek_words)>1:
-        # print(f"Multiple words for for {word}, {heb_word}: {verified_greek_words}")
-        return word, True
-    else:
-        return verified_greek_words[0], False
-
-
-# def check_again(word,lookup,LSJ):
-#     pattern = re.compile("|".join(map(re.escape, lookup.keys())))
-#     if word[-3:] == "ein":
-#         new_word = word[:-3]
-#         suff = "ειν"
-#     else:
-#         suff = ""
-#         for idx,letter in enumerate(word[::-1]):
-#             if letter not in ("e","o","i"):
-#                 suff = letter + suff 
-#             else:
-#                 break
-#         suff = pattern.sub(lambda match: lookup[match.group(0)], suff)
-#         new_word = word[:idx]
-
-#     greek_word = pattern.sub(lambda match: lookup[match.group(0)], new_word)
-#     greek_words = generate_words(greek_word)
-#     greek_words = list(set(greek_words))
+        return word, True, []
     
-#     verified_greek_words = []
-#     for greek_word in greek_words:
-#         check = len(greek_word)
-#         for idx in range(len(LSJ)):
-#             greek = LSJ.iloc[idx,1][:check]
-#             if greek==greek_word:
-#                 verified_greek_words.append(greek+suff)
-#                 break
-#     if len(verified_greek_words)==0:
-#         return None
-#     return " or ".join(verified_greek_words)
-            
+    elif len(verified_greek_words)>1:
+        return word, True, verified_greek_words
+    else:
+        return verified_greek_words[0], False, []

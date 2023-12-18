@@ -9,9 +9,11 @@ fileName = "Greek-Klein.csv"
 dir = os.path.dirname(__file__) + '/../data'
 filePath  = f"{dir}/{fileName}"
 
-greek_letters = regex.compile(r'''\b(?<=Gk. suff. -\s?|Greek suff. -\s?|Gk. suff. –\s?|Gk. –\s?|Gk. -\s?
-                              |Gk. \(pathos\)\s?|Gk. form\s?|Gk. from\s?|Gk. adjectives ending in – |Gk. vulgar var.|
-                              Gk.\s?)\w+(?<!suff|word|words|form|from|pref|adjectives|privative|vulgar)\b''',regex.X)
+greek_letters = regex.compile(r'''\b(?<=Gk. suff. -\s?|Greek suff. -\s?|Gk. suff. –\s?|Gk. –\s?|Gk. -\s?|Gk. combining from –\s?
+                              |Gk. \(pathos\)\s?|Gk. form\s?|Gk. from\s?|Gk. adjectives ending in –\s?|Gk. vulgar var.\s?|Gk.\s?|Gk. ending –\s?)
+                              \w+
+                              (?<!suff|word|words|form|from|pref|adjectives|privative|vulgar|combining|\(pathos\)|ending|loan
+                              |mythology|origin|proper|transcription|mythology|dimin|church)\b''',regex.X)
 
 def load_dfs(*filePaths):
     output = []
@@ -28,14 +30,14 @@ def get_greek_word(df):
         match = list(set( i for i in greek_letters.findall(row["Definition"]) if len(i)>1))
         # Handle the first match easily by adding to the same row
         try:
-            greek_words.append(match[0].lower())
+            greek_words.append(match[0])
         except: # Doesn't explicitly mention the word, just mentions "Greek"
             greek_words.append("REMOVE")
             continue
         # later matches need duplicated rows
         for m in match[1:]:
             duplicated_row = row.copy()
-            duplicated_row["Greek Entry"] = m.lower()
+            duplicated_row["Greek Entry"] = m
             extra_rows.append(duplicated_row)
     print(f"Adding {len(extra_rows)} more rows than the original dict")
     return greek_words, extra_rows
