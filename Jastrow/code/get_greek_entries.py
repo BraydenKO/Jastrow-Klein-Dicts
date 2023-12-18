@@ -1,3 +1,7 @@
+"""
+Gets specifically only greek-related entries from
+the main Jastrow csv. Creates a file called 'Greek-Jastrow.csv'
+"""
 import pandas as pd
 import os
 

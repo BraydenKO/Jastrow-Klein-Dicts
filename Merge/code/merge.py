@@ -1,7 +1,10 @@
+"""
+Merges the Greek entries from Jastrow and Klein sorted
+by the hebrew/aramaic word.
+"""
 import re
 import os
 import pandas as pd
-import unicodedata
 
 fileName_0 = "Greek-Jastrow.csv"
 fileName_1= "Greek-Klein.csv"

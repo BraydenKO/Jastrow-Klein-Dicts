@@ -1,4 +1,11 @@
- # NOTE: Useing regex instead of re to make variable width lookahead
+"""
+These functions are specifically used when merging
+the Jastrow version of Greek-Heb_Aram.csv and the Klein version.
+The Greek words in Klein's dictionary are spelled with Latin
+characters. 
+These functions help convert those words into
+Greek spelling to match what Jastrow has."""
+# NOTE: Useing regex instead of re to make variable width lookahead
 import sys
 import os
 sys.path.append(os.path.dirname(__file__) + "/../..")

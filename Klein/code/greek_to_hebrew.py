@@ -1,4 +1,10 @@
- # NOTE: Useing regex instead of re to make variable width lookahead
+"""
+Creates a csv or entries sorted by the Greek word
+in their definition. This csv is called 'Greek-Heb_Aram.csv'
+The Greek entries are spelled in Latin characters, the same way
+found in the Klein dictionary.
+""" 
+# NOTE: Useing regex instead of re to make variable width lookahead
 import regex
 import os
 import pandas as pd
@@ -46,7 +52,7 @@ def re_organize_df(df, greek_words,extra_rows):
     df["Greek Entry"] = greek_words
     df = df.drop(df[df["Greek Entry"] == "REMOVE"].index)
     df = pd.concat([df,pd.DataFrame(extra_rows)],ignore_index=True)
-    df['SortKey'] = df["Greek Entry"].apply(lambda x: unicodedata.normalize('NFD', x))
+    df['SortKey'] = df["Greek Entry"].apply(lambda x: unicodedata.normalize('NFD', x).lower())
     df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop('SortKey', axis=1, inplace=True)
     df = df.reindex(columns=['Unnamed: 0', 'Greek Entry', 'Entry', 'Definition'])

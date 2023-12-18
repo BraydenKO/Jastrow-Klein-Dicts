@@ -1,6 +1,9 @@
 """
 Im not a huge fan of the way this runs.
 TODO: Organize and optimize
+
+These functions are used to determine whether a word or
+its variations are in LSJ
 """
 
 import pandas as pd

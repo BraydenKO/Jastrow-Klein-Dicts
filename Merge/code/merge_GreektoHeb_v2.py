@@ -1,3 +1,9 @@
+"""
+Merges the Jastrow and Klein entries sorted by 
+the Greek word.
+This version searches the LSJ dict for matches to
+Klein's Greek words.
+"""
 import sys
 import os
 sys.path.append(os.path.dirname(__file__) + "/../..")

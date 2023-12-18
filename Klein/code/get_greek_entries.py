@@ -1,3 +1,7 @@
+"""
+Gets specifically only greek-related entries from
+the main Klein csv. Creates a file called 'Greek-Klein.csv'
+"""
 import pandas as pd
 import os
 

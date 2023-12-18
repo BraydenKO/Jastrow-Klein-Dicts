@@ -1,3 +1,9 @@
+"""
+Merges the Jastrow and Klein entries sorted by 
+the Greek word.
+This version does not convert Klein's words into Greek
+spelling and will likely be removed.
+"""
 import os
 import pandas as pd
 import unicodedata

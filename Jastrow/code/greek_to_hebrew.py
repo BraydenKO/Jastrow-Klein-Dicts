@@ -1,3 +1,7 @@
+"""
+Creates a csv or entries sorted by the Greek word
+in their definition. This csv is called 'Greek-Heb_Aram.csv'
+"""
 import os
 import pandas as pd
 import re
