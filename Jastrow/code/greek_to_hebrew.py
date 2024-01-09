@@ -20,6 +20,10 @@ def load_dfs(*filePaths):
         output.append(pd.read_csv(path))
     return output if len(output)>1 else output[0]
 
+def strip_accents(s):
+   return ''.join(c for c in unicodedata.normalize('NFD', s)
+                  if unicodedata.category(c) != 'Mn').lower()
+
 def get_greek_word(df):
     greek_words = []
     extra_rows = []
@@ -38,7 +42,7 @@ def get_greek_word(df):
 def re_organize_df(df, greek_words,extra_rows):
     df["Greek Entry"] = greek_words
     df = pd.concat([df,pd.DataFrame(extra_rows)],ignore_index=True)
-    df['SortKey'] = df["Greek Entry"].apply(lambda x: unicodedata.normalize('NFD', x))
+    df['SortKey'] = df["Greek Entry"].apply(strip_accents)
     df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop('SortKey', axis=1, inplace=True)
     df = df.reindex(columns=['Unnamed: 0', 'Greek Entry', 'Entry', 'Definition'])
