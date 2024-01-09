@@ -5,7 +5,7 @@ This version looks up the words on Wiktionary. This
 version will likely be removed because looking words up
 on Wiktionary a) wasn't as helpful as assumed and b) matched with
 Modern Greek instead of Ancient Greek when possible (we are looking for
-Actient Greek words).
+Ancient Greek words).
 """
 import os
 import pandas as pd
