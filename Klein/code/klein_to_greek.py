@@ -43,7 +43,7 @@ def greekify(df,LSJ,manual_romantogreek):
     start_time = time.time()
     count = 1
     print(f"0.00% complete",end="")
-    for greek_entry in df["Greek Entry"]:
+    for id,greek_entry in zip(df["Unnamed: 0"],df["Greek Entry"]):
         if count%100 == 0:
             p = 100*count/row_count
             t = time.time()-start_time
@@ -53,10 +53,20 @@ def greekify(df,LSJ,manual_romantogreek):
         if not is_roman:
             verified_greek = f"{verified_greek} ({greek_entry})"
         else:
-            manual_greek_entries = manual_romantogreek.loc[manual_romantogreek["Roman Entry"]==verified_greek.lower(), "Greek Entry"]
+            manual_greek_entries = manual_romantogreek.loc[manual_romantogreek["Roman Entry"]==verified_greek.lower(), ["Greek Entry","ID"]]
             if not manual_greek_entries.empty:
                 # Have to use .iloc because the index isn't always the same number which Series[0] would use.
-                verified_greek = f"{manual_greek_entries.iloc[0]} ({greek_entry})"
+                
+                # If one word gets mapped to multiple greek words, match based on the "ID" column
+                if len(manual_greek_entries)>1:
+                    manual_greek_entries = manual_greek_entries.loc[manual_greek_entries["ID"]==id,"Greek Entry"]
+                    if manual_greek_entries.empty:
+                        raise KeyError(f"Entry has id:{id} which isn't found in manual_RtG for rows matching {verified_greek.lower()}")
+
+                    verified_greek =  verified_greek = f"{manual_greek_entries.iloc[0].strip()} ({greek_entry})"
+                    
+                else: 
+                    verified_greek = f"{manual_greek_entries.iloc[0]['Greek Entry'].strip()} ({greek_entry})"
                 is_roman = False
         if greek_entry[0].isupper():
             verified_greek = verified_greek[0].upper() + verified_greek[1:]

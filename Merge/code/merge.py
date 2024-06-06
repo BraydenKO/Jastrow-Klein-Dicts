@@ -1,6 +1,11 @@
 """
 Merges the Greek entries from Jastrow and Klein sorted
 by the hebrew/aramaic word.
+
+In the Jastrow entries, the entry contains a greek character.
+In the Klein entries, the entry contrains either "Greek" or "Gk." even if it
+doesn't contain any Ancient Greek root or word.
+
 """
 import re
 import os

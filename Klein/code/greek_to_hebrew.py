@@ -3,6 +3,12 @@ Creates a csv or entries sorted by the Greek word
 in their definition. This csv is called 'Greek-Heb_Aram.csv'
 The Greek entries are spelled in Latin characters, the same way
 found in the Klein dictionary.
+
+NOTE: This includes all cases of "Med. Gk." We can use a negative
+lookbehind to exclude all such words.
+    We can remove the negative lookbehind from the regex string and manually 
+check about 20 such "medieval" entries to see if other sources claim it is 
+ancient and add a note on this argument.
 """ 
 # NOTE: Useing regex instead of re to make variable width lookahead
 import regex
@@ -15,8 +21,12 @@ fileName = "Greek-Klein.csv"
 dir = os.path.dirname(__file__) + '/../data'
 filePath  = f"{dir}/{fileName}"
 
-greek_letters = regex.compile(r'''\b(?<=Gk. suff. -\s?|Greek suff. -\s?|Gk. suff. –\s?|Gk. –\s?|Gk. -\s?|Gk. combining from –\s?
-                              |Gk. \(pathos\)\s?|Gk. form\s?|Gk. from\s?|Gk. adjectives ending in –\s?|Gk. vulgar var.\s?|Gk.\s?|Gk. ending –\s?)
+# I dont know at all why the negative lookbehinds such as "(?<!cp. \s?Gk.\s?)"
+# needs an extra optional space between "Med. " and "Gk.\s?". There is always one space between 
+# 'cp.' and 'Gk.' but it is somehow related to regex.X ... regex has defeated me.
+greek_letters = regex.compile(r'''\b(?<=Gk. –\s?|Gk. -\s?|Gk. combining from –\s?
+                              |Gk. \(pathos\)\s?|Gk. from\s?|Gk. adjectives ending in –\s?|Gk. vulgar var.\s?|Gk.\s?)
+                              (?<!cp. \s?Gk.\s?|cogn. \s?with \s?Gk.\s?)
                               \w+
                               (?<!suff|word|words|form|from|pref|adjectives|privative|vulgar|combining|\(pathos\)|ending|loan
                               |mythology|origin|proper|transcription|mythology|dimin|church)\b''',regex.X)
@@ -48,7 +58,7 @@ def get_greek_word(df):
     print(f"Adding {len(extra_rows)} more rows than the original dict")
     return greek_words, extra_rows
 
-def re_organize_df(df, greek_words,extra_rows):
+def re_organize_df(df, greek_words,extra_rows, remove_ids):
     df["Greek Entry"] = greek_words
     df = df.drop(df[df["Greek Entry"] == "REMOVE"].index)
     df = pd.concat([df,pd.DataFrame(extra_rows)],ignore_index=True)
@@ -64,6 +74,7 @@ def re_organize_df(df, greek_words,extra_rows):
 
 if __name__ == "__main__":
     df = load_dfs(filePath)
+    print("loaded dict")
     greek_words, extra_rows = get_greek_word(df)
     df = re_organize_df(df, greek_words,extra_rows)
     df.to_csv(f"{dir}/Greek-Heb_Aram.csv", index=False)

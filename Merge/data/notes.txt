@@ -1,0 +1,13 @@
+**Editor's Notes:
+Klein 2985, beledarios may be a typo and should be beredarios. Jastrow and Klein's own etymology of this word suggests this is a typo.
+Klein 12112, chalkisidos. Klein likely meant 'chalikis, -idos' or 'χαλκίς, -ίδος' which is the way Jastrow presents the etymology. This means that the genitive is χαλκίδος
+Klein 12024, cheiroergos. Could only find reference to a word for cheirourgos meaning the same thing. Perhaps it's an alternate spelling or a typo.
+Klein 1027, eikoncon. The 'i' or 'iota' was possibly mistaken for a 'c' and became written down as 'eikoncon'. Jastrow writes "εἰκόνιον" which supports the fact that this is a typo.
+Klein 1712, eschala. The 'l' likley should be an 'r' or a rho. Jastrow references this word spelled with a rho.
+Klein 4613 karoun. possibly a typo and should be karuon (with the 'o' and 'u' switched) which correctly translates to nut.
+Klein 24777 kibetion. Couldn't find a source referencing "kibetion" but found a source referencing "κιβώτιον" as the dimin. form of "κιβωτός"
+Klein 1248 Lixon. likley should be loxon-λοξόν
+Klein 15148 melole. Perhaps meant to be melote-μηλωτή. See LXX 3Kingdoms 19:13 (corresponding to Kings I 19:13) where μηλωτή appears.
+Klein 14964 metaron. Likely a typo given the latin "mētātor" and that Klein in his CEDEL writes metator-μητάτωρ as the Late Gk. word from which מְטַטְרוֹן comes.
+Klein 20763 statiotes. Possible the 'r' dropped and was meant to be stratiotes-στρατιώτης
+Jastrow 20208 ὡροσκοπία. While the word 'סִימְפּוֹנְיָא' isn't related to the word 'ὡροσκοπία,' it is included to highlight the use of 'בהוֹרוֹסְקוֹפְיָא' in rabbinic literature which does have a Greek origin.

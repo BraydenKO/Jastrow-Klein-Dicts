@@ -1,20 +1,25 @@
 """
 Merges the Jastrow and Klein entries sorted by 
 the Greek word.
-This version does not convert Klein's words into Greek
-spelling and will likely be removed.
+This version searches the LSJ dict for matches to
+Klein's Greek words.
 """
+import sys
 import os
+sys.path.append(os.path.dirname(__file__) + "/../..")
+from Klein.code import klein_to_greek
+
+
 import pandas as pd
 import unicodedata
-from unidecode import unidecode
 
-fileName = "Greek-Heb_Aram.csv"
+
+fileName = "Greek-Heb_Aram(final).csv"
 
 dir = os.path.dirname(__file__) + "/../.."
 filePath_0  = f"{dir}/Jastrow/data/01-Merged XML/{fileName}"
 filePath_1  = f"{dir}/Klein/data/{fileName}"
-#["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "v", "x", "y", "z", "í", "ï", "ē", "ō"]
+filePath_2  = f"{dir}/Merge/data/manual_RomantoGreek.csv"
 
 def load_dfs(*filePaths):
     output = []
@@ -22,21 +27,13 @@ def load_dfs(*filePaths):
         output.append(pd.read_csv(path))
     return output if len(output)>1 else output[0]
 
-def tag_roman_word(word,tag="ωωω"):
-    """
-    Adds a Greek letter to put the word into proper alpha-omega order.
-    Adds an em—dash to make sure the roman spelled words come after greek
-    spelled words.
-    """
+def create_lookup():
     replacements = {
         "th": "θ",
         "ph": "φ",
         "ch": "χ"
     }
-    for key in replacements.keys():
-        if word[:2] == key:
-            word = replacements[key] + word[2:]
-    lookup = {
+    base_lookup = {
         "a": "α",
         "b": "β",
         "v": "β",
@@ -63,6 +60,22 @@ def tag_roman_word(word,tag="ωωω"):
         "y": "υ",
         "ō": "ω",
     }
+    lookup = base_lookup.copy()
+    for latin,greek in base_lookup.items():
+        lookup[latin.upper()]=greek.upper()
+        
+    return replacements, lookup
+
+def tag_roman_word(word,tag="ωωω"):
+    """
+    Adds a Greek letter to put the word into proper alpha-omega order.
+    Adds an em—dash to make sure the roman spelled words come after greek
+    spelled words.
+    """
+    for key in replacements.keys():
+        if word[:2] == key:
+            word = replacements[key] + word[2:]
+
     if word[0] == "h":
         return lookup[word[1]] + tag + word[1:] + "<tag>h"
 
@@ -86,27 +99,52 @@ def untag_roman_word(word,tag="ωωω"):
 
 def strip_accents(s):
    return ''.join(c for c in unicodedata.normalize('NFD', s)
-                  if unicodedata.category(c) != 'Mn')
+                  if unicodedata.category(c) != 'Mn').lower()
 
-def sort_words(greekdf, romandf):
+def sort_words(jastrow_df, klein_df):
     # Prepare Dicts
-    romandf["Greek Entry"] = romandf["Greek Entry"].apply(tag_roman_word)
-    greekdf["IsRoman"] = False
-    romandf["IsRoman"] = True
+    klein_df.drop("PossibleGreek",axis=1,inplace=True)
+    X =  klein_df.loc[klein_df["IsRoman"]==True,"Greek Entry"]
+    klein_df.loc[klein_df["IsRoman"]==True,"Greek Entry"] = X.apply(tag_roman_word)
+    jastrow_df["IsRoman"]=False
+
+    jastrow_df["Unnamed: 0"] = jastrow_df["Unnamed: 0"].apply(lambda id: f"Jastrow {id}")
+    klein_df["Unnamed: 0"] = klein_df["Unnamed: 0"].apply(lambda id: f"Klein {id}")
+
+
     # Sort them
-    df = pd.concat([greekdf,romandf])
+    df = pd.concat([jastrow_df,klein_df])
     df["SortKey"] = df["Greek Entry"].apply(strip_accents)
     df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop("SortKey",axis=1, inplace=True)
 
-    df.loc[df["IsRoman"]==True,"Greek Entry"] = df.loc[df["IsRoman"]==True,"Greek Entry"].apply(
-        untag_roman_word
-    )
+
+    # Untag
+    X = df.loc[df["IsRoman"]==True,"Greek Entry"]
+    df.loc[df["IsRoman"]==True,"Greek Entry"] = X.apply(untag_roman_word)
+
     df.drop("IsRoman",axis=1, inplace=True)
+    df = df.rename(columns = {"Unnamed: 0": "Dictionary ID"})
+    
     return df
 
+def save_romans(df):
+    romans = df.loc[df["IsRoman"]==True]
+    romans.to_csv(f"{dir}/Merge/data/nongreeked_entries.csv", index=False)
+    return romans["Greek Entry"].nunique()
 
 if __name__ == "__main__":
-    greekdf, romandf = load_dfs(filePath_0, filePath_1)
-    df = sort_words(greekdf,romandf)
+    print("Loading dfs...")
+    jastrow_df, klein_df, manual_romantogreek = load_dfs(filePath_0, filePath_1, filePath_2)
+
+    print("Converting Klein entries into Greek...")
+    klein_df = klein_to_greek.get_greeked_df(klein_df,manual_romantogreek)
+    num_ungreeked = save_romans(klein_df)
+    print(f"There are {num_ungreeked} un-greeked words")
+
+    print("Sorting df...")
+    replacements, lookup = create_lookup()
+    df = sort_words(jastrow_df,klein_df)
+
+    print("Saving df...")
     df.to_csv(f"{dir}/Merge/data/merged_GreektoHeb.csv", index=False)

@@ -29,11 +29,11 @@ def get_greek_word(df):
     extra_rows = []
     for idx in range(len(df)):
         row = df.iloc[idx]
-        match = greek_letters.findall(row["Definition"])
-        greek_words.append(match[0].lower())
+        match = list(set(greek_letters.findall(row["Definition"])))
+        greek_words.append(match[0])
         for m in match[1:]:
             duplicated_row = row.copy()
-            duplicated_row["Greek Entry"] = m.lower()
+            duplicated_row["Greek Entry"] = m
             extra_rows.append(duplicated_row)
         
     print(f"Adding {len(extra_rows)} more rows than the original dict")
