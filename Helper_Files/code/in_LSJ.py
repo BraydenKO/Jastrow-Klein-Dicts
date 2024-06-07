@@ -119,4 +119,7 @@ def greek_in_LSJ(word,LSJ):
     elif len(verified_greek_words)>1:
         return word, True, verified_greek_words
     else:
-        return verified_greek_words[0], False, []
+        word = verified_greek_words[0]
+        if word[-1] == "σ":
+            word = word[:-1] + "ς"
+        return word, False, []
