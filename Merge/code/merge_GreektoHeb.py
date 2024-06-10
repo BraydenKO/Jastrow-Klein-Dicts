@@ -133,6 +133,22 @@ def save_romans(df):
     romans.to_csv(f"{dir}/Merge/data/nongreeked_entries.csv", index=False)
     return romans["Greek Entry"].nunique()
 
+def fix_holem(df):    
+    # Check if Holem is above Waw
+    #if 'ו' not in normalized_word or '\u05B9' not in normalized_word:
+    #    return False
+    def fix_holem_in_word(entry):
+      i = 1
+      while i < len(entry):
+          if entry[i] == 'ו' and entry[i - 1] == '\u05B9':
+              entry = entry[:i-1] + 'ו' + '\u05B9' + entry[i+1:]
+              i+=1
+          i+=1
+      return entry
+    df["Entry"] = df["Entry"].apply(fix_holem_in_word)
+
+    return df
+
 if __name__ == "__main__":
     print("Loading dfs...")
     jastrow_df, klein_df, manual_romantogreek = load_dfs(filePath_0, filePath_1, filePath_2)
@@ -145,6 +161,7 @@ if __name__ == "__main__":
     print("Sorting df...")
     replacements, lookup = create_lookup()
     df = sort_words(jastrow_df,klein_df)
+    df = fix_holem(df)
 
     print("Saving df...")
     df.to_csv(f"{dir}/Merge/data/merged_GreektoHeb.csv", index=False)

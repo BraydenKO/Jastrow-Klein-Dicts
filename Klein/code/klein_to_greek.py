@@ -49,25 +49,28 @@ def greekify(df,LSJ,manual_romantogreek):
             t = time.time()-start_time
             e = t*(100/p -1) #t/p = T/100 & T = e + t -> e = t*(100/p - 1)
             print(f"\r{p:.2f}% complete. {t:.2f}s elapsed. Expected to finish in {e:.2f}s",end="")
-        verified_greek, is_roman, possible_greek = in_LSJ.greek_in_LSJ(greek_entry,LSJ)
-        if not is_roman:
-            verified_greek = f"{verified_greek} ({greek_entry})"
-        else:
-            manual_greek_entries = manual_romantogreek.loc[manual_romantogreek["Roman Entry"]==verified_greek.lower(), ["Greek Entry","ID"]]
-            if not manual_greek_entries.empty:
-                # Have to use .iloc because the index isn't always the same number which Series[0] would use.
-                
-                # If one word gets mapped to multiple greek words, match based on the "ID" column
-                if len(manual_greek_entries)>1:
-                    manual_greek_entries = manual_greek_entries.loc[manual_greek_entries["ID"]==id,"Greek Entry"]
-                    if manual_greek_entries.empty:
-                        raise KeyError(f"Entry has id:{id} which isn't found in manual_RtG for rows matching {verified_greek.lower()}")
 
-                    verified_greek =  verified_greek = f"{manual_greek_entries.iloc[0].strip()} ({greek_entry})"
-                    
-                else: 
-                    verified_greek = f"{manual_greek_entries.iloc[0]['Greek Entry'].strip()} ({greek_entry})"
-                is_roman = False
+        manual_greek_entries = manual_romantogreek.loc[manual_romantogreek["Roman Entry"]==verified_greek.lower(), ["Greek Entry","ID"]]
+        if not manual_greek_entries.empty:
+            # Have to use .iloc because the index isn't always the same number which Series[0] would use.
+            
+            # If one word gets mapped to multiple greek words, match based on the "ID" column
+            if len(manual_greek_entries)>1:
+                manual_greek_entries = manual_greek_entries.loc[manual_greek_entries["ID"]==id,"Greek Entry"]
+                if manual_greek_entries.empty:
+                    raise KeyError(f"Entry has id:{id} which isn't found in manual_RtG for rows matching {verified_greek.lower()}")
+
+                verified_greek = f"{manual_greek_entries.iloc[0].strip()} ({greek_entry})"
+                
+            else: 
+                verified_greek = f"{manual_greek_entries.iloc[0]['Greek Entry'].strip()} ({greek_entry})"
+            is_roman = False
+
+        else:
+            verified_greek, is_roman, possible_greek = in_LSJ.greek_in_LSJ(greek_entry,LSJ)
+            if not is_roman:
+                verified_greek = f"{verified_greek} ({greek_entry})"
+
         if greek_entry[0].isupper():
             verified_greek = verified_greek[0].upper() + verified_greek[1:]
         greek_entries.append(verified_greek)

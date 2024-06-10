@@ -45,21 +45,6 @@ def to_txt(df,fileName):
     with open(f"{dir}/Merge/data/{fileName}.html", 'w',encoding="utf-8") as file:
         file.write(html_content)
     return
-    with open(f"{dir}/Merge/data/{fileName}.txt", 'w', encoding="utf-8") as file:
-        file.write("Kohler's Dictionary of Greek Words Used in Rabbinic Literature (KGRL)")
-        for row in df.iterrows():
-            file.write(f"{row[1]['Greek Entry']} - {row[1]['Entry']}")
-            file.write("\n")
-            file.write(row[1]["Dictionary ID"])
-            file.write("\n")
-            definition = row[1]["Definition"]
-            while len(definition) > 79: # pep8 style
-                file.write(definition[:79])
-                file.write("\n")
-                definition = definition[79:]
-            file.write(definition)
-            file.write("\n")
-            file.write("\n")
 
 if __name__ == "__main__":
     df = load_df(filePath)
