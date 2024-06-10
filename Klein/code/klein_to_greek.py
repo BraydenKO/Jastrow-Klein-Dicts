@@ -50,7 +50,7 @@ def greekify(df,LSJ,manual_romantogreek):
             e = t*(100/p -1) #t/p = T/100 & T = e + t -> e = t*(100/p - 1)
             print(f"\r{p:.2f}% complete. {t:.2f}s elapsed. Expected to finish in {e:.2f}s",end="")
 
-        manual_greek_entries = manual_romantogreek.loc[manual_romantogreek["Roman Entry"]==verified_greek.lower(), ["Greek Entry","ID"]]
+        manual_greek_entries = manual_romantogreek.loc[manual_romantogreek["Roman Entry"]==greek_entry.lower(), ["Greek Entry","ID"]]
         if not manual_greek_entries.empty:
             # Have to use .iloc because the index isn't always the same number which Series[0] would use.
             
