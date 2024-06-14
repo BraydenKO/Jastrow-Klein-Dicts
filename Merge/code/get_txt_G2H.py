@@ -23,9 +23,10 @@ def to_txt(df,fileName):
 </head>
 <body>
 """
-    html_content += f"<h1>Kohler’s Lexicon of Rabbinic Greek</h1>\n"
-    html_content += f"<h2>and Greek words in later Hebrew texts,</h2>\n"
+    html_content += f"<h1>Lexicon of Rabbinic Greek</h1>\n"
+    html_content += f"<h2>and of Greek words in later Hebrew texts,</h2>\n"
     html_content += f"<h2>based on the Jastrow and Klein dictionaries (title is WIP)</h2>\n"
+    html_content += f"<h2>By Brayden Kohler</h2>\n"
     html_content += "<br>\n"
     for idx, row in enumerate(df.iterrows()):
         html_content += f"<h3>{row[1]['Greek Entry']} - {row[1]['Entry']}</h3>\n"
