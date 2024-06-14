@@ -20,6 +20,21 @@ def to_txt(df,fileName):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{fileName}</title>
+    <style>
+        /* Add some basic styling for the footer */
+        footer {{
+            display: flex; /* Enables Flexbox layout */
+            justify-content: left; 
+            align-items: center;
+            padding: 5px; 
+            background-color: #f1f1f1;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 30px; 
+        }}
+    </style>
 </head>
 <body>
 """
@@ -40,6 +55,9 @@ def to_txt(df,fileName):
         html_content += f"<h5>{definition}</h5>\n"
         html_content += "<br>\n"
     html_content +="""
+  <footer>
+      <p>© 2024 by Brayden Kohler</p>
+  </footer>
 </body>
 </html>
 """
