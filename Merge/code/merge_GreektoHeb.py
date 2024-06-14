@@ -108,8 +108,8 @@ def sort_words(jastrow_df, klein_df):
     klein_df.loc[klein_df["IsRoman"]==True,"Greek Entry"] = X.apply(tag_roman_word)
     jastrow_df["IsRoman"]=False
 
-    jastrow_df["Unnamed: 0"] = jastrow_df["Unnamed: 0"].apply(lambda id: f"Jastrow {id}")
-    klein_df["Unnamed: 0"] = klein_df["Unnamed: 0"].apply(lambda id: f"Klein {id}")
+    jastrow_df["Unnamed: 0"] = jastrow_df["Unnamed: 0"].apply(lambda id: f"Jastrow {id}") # NOTE: The original Jastrow file is 0-based
+    klein_df["Unnamed: 0"] = klein_df["Unnamed: 0"].apply(lambda id: f"Klein {id-1}") # NOTE: The original Klein file is 1-based
 
 
     # Sort them
