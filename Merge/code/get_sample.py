@@ -26,7 +26,7 @@ def get_samples(df, n = 10, seed = 1):
 
 if __name__ == "__main__":
     df = load_df(filePath)
-    df = get_samples(df,seed =3)
+    df = get_samples(df, n = 50, seed =3)
     to_txt(df,"Sample")
 
     
