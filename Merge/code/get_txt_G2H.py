@@ -42,6 +42,8 @@ def to_txt(df,fileName):
     html_content += f"<h2>and of Greek words in later Hebrew texts,</h2>\n"
     html_content += f"<h2>based on the Jastrow and Klein dictionaries (title is WIP)</h2>\n"
     html_content += f"<h2>by Brayden Kohler</h2>\n"
+    link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/Merge/data/intro.html"
+    html_content += f"<h3><a href={link}>Introduction and Selection Criteria</a></h3>\n"
     html_content += "<br>\n"
     for idx, row in enumerate(df.iterrows()):
         html_content += f"<h3>{row[1]['Greek Entry']} - {row[1]['Entry']}</h3>\n"
@@ -61,7 +63,7 @@ def to_txt(df,fileName):
 </body>
 </html>
 """
-    with open(f"{dir}/Merge/data/{fileName}.html", 'w',encoding="utf-8") as file:
+    with open(f"{dir}/websites/{fileName}.html", 'w',encoding="utf-8") as file:
         file.write(html_content)
     return
 
