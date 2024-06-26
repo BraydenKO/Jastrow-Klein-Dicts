@@ -36,7 +36,7 @@ def to_txt(df,fileName):
         }}
     </style>
 </head>
-<body>
+<body style="padding-bottom: 30px;">
 """
     html_content += f"<h1>Lexicon of Rabbinic Greek</h1>\n"
     html_content += f"<h2>and of Greek words in later Hebrew texts,</h2>\n"
