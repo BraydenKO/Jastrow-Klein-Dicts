@@ -50,11 +50,11 @@ def to_txt(df,fileName, is_gktoheb):
     html_content += f"<h2>by Brayden Kohler</h2>\n"
     if is_gktoheb:
         other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merged_HebtoGreek.html"
-        html_content += f"""<h7>sorted by Greek words in headword. </h7>
+        html_content += f"""<h7>Sorted by Greek words in headword. </h7>
         Click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Hebrew words."""
     else:
         other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merged_GreektoHeb.html"
-        html_content += f"""<h7>sorted by Hebrew words in headword.</h7>
+        html_content += f"""<h7>Sorted by Hebrew words in headword.</h7>
         Click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Greek words."""
 
     intro_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/intro.html"
