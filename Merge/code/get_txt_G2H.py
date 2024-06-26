@@ -5,7 +5,7 @@ import pandas as pd
 import os
 
 fileName_g2h = "merged_GreektoHeb"
-fileName_h2g = "merged_GreektoHeb"
+fileName_h2g = "merged_HebtoGreek"
 
 dir = os.path.dirname(__file__) + '/../..'
 filePath_g2h = f"{dir}/Merge/data/{fileName_g2h}.csv"
@@ -87,6 +87,6 @@ def to_txt(df,fileName, is_gktoheb):
     return
 
 if __name__ == "__main__":
-    df_g2h, df_h2g = load_dfs(filePath_g2h,fileName_h2g)
+    df_g2h, df_h2g = load_dfs(filePath_g2h,filePath_h2g)
     to_txt(df_g2h, fileName_g2h, is_gktoheb=True)
     to_txt(df_h2g, fileName_h2g, is_gktoheb=False)
