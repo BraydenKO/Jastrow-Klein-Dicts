@@ -118,14 +118,13 @@ def sort_words(jastrow_df, klein_df):
     df = df.sort_values(by="SortKey", kind="mergesort")
     df.drop("SortKey",axis=1, inplace=True)
 
-
     # Untag
     X = df.loc[df["IsRoman"]==True,"Greek Entry"]
     df.loc[df["IsRoman"]==True,"Greek Entry"] = X.apply(untag_roman_word)
 
     df.drop("IsRoman",axis=1, inplace=True)
     df = df.rename(columns = {"Unnamed: 0": "Dictionary ID"})
-    
+  
     return df
 
 def save_romans(df):
@@ -149,6 +148,10 @@ def fix_holem(df):
 
     return df
 
+def get_hebtogk(df):
+    # Get Hebrew to Greek version
+    return df.sort_values(by="Entry", kind="mergesort")
+
 if __name__ == "__main__":
     print("Loading dfs...")
     jastrow_df, klein_df, manual_romantogreek = load_dfs(filePath_0, filePath_1, filePath_2)
@@ -162,6 +165,9 @@ if __name__ == "__main__":
     replacements, lookup = create_lookup()
     df = sort_words(jastrow_df,klein_df)
     df = fix_holem(df)
+    df_hebtogk = get_hebtogk(df)
+
 
     print("Saving df...")
     df.to_csv(f"{dir}/Merge/data/merged_GreektoHeb.csv", index=False)
+    df.to_csv(f"{dir}/Merge/data/merged_HebtoGreek.csv", index=False)

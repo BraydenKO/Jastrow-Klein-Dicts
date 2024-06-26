@@ -4,15 +4,21 @@ Takes the csv of merged_GreektoHeb and converts it to txt.
 import pandas as pd
 import os
 
-fileName = "merged_GreektoHeb"
+fileName_g2h = "merged_GreektoHeb"
+fileName_h2g = "merged_GreektoHeb"
 
 dir = os.path.dirname(__file__) + '/../..'
-filePath = f"{dir}/Merge/data/{fileName}.csv"
+filePath_g2h = f"{dir}/Merge/data/{fileName_g2h}.csv"
+filePath_h2g = f"{dir}/Merge/data/{fileName_h2g}.csv"
 
-def load_df(filePath):
-    return pd.read_csv(filePath)
 
-def to_txt(df,fileName):
+def load_dfs(*filePaths):
+    output = []
+    for path in filePaths:
+        output.append(pd.read_csv(path))
+    return output if len(output)>1 else output[0]
+
+def to_txt(df,fileName, is_gktoheb):
     html_content = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -42,9 +48,17 @@ def to_txt(df,fileName):
     html_content += f"<h2>and Greek words in later Hebrew texts,</h2>\n"
     html_content += f"<h2>based on the Jastrow and Klein dictionaries</h2>\n"
     html_content += f"<h2>by Brayden Kohler</h2>\n"
-    # TODO: Change this file to link to the one in websites. 
-    link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/intro.html"
-    html_content += f"<h3><a href={link}>Introduction and Selection Criteria</a></h3>\n"
+    if is_gktoheb:
+        other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merge_HebtoGreek.html"
+        html_content += f"""<h7>sorted by Greek words in headword</h7>
+        click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Hebrew words."""
+    else:
+        other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merge_GreektoHeb.html"
+        html_content += f"""<h7>sorted by Hebrew words in headword</h7>
+        click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Greek words."""
+
+    intro_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/intro.html"
+    html_content += f"<h3><a href={intro_link}>Introduction and Selection Criteria</a></h3>\n"
     html_content += "<br>\n"
     for idx, row in enumerate(df.iterrows()):
         html_content += f"<h3>{row[1]['Greek Entry']} - {row[1]['Entry']}</h3>\n"
@@ -73,5 +87,6 @@ def to_txt(df,fileName):
     return
 
 if __name__ == "__main__":
-    df = load_df(filePath)
-    to_txt(df, fileName)
+    df_g2h, df_h2g = load_dfs(filePath_g2h,fileName_h2g)
+    to_txt(df_g2h, fileName_g2h, is_gktoheb=True)
+    to_txt(df_h2g, fileName_h2g, is_gktoheb=False)
