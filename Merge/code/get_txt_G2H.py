@@ -39,8 +39,8 @@ def to_txt(df,fileName):
 <body style="padding-bottom: 30px;">
 """
     html_content += f"<h1>Lexicon of Rabbinic Greek</h1>\n"
-    html_content += f"<h2>and of Greek words in later Hebrew texts,</h2>\n"
-    html_content += f"<h2>based on the Jastrow and Klein dictionaries (title is WIP)</h2>\n"
+    html_content += f"<h2>and Greek words in later Hebrew texts,</h2>\n"
+    html_content += f"<h2>based on the Jastrow and Klein dictionaries</h2>\n"
     html_content += f"<h2>by Brayden Kohler</h2>\n"
     # TODO: Change this file to link to the one in websites. 
     link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/intro.html"
