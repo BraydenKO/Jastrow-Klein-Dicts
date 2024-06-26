@@ -150,7 +150,15 @@ def fix_holem(df):
 
 def get_hebtogk(df):
     # Get Hebrew to Greek version
-    return df.sort_values(by="Entry", kind="mergesort")
+    def strip_hebrew(word):
+        word = word.replace(',', '')
+        return ''.join([c for c in unicodedata.normalize('NFD', word) if unicodedata.category(c) == "Lo"])
+    
+    df["SortKey"] = df["Entry"].apply(strip_hebrew)
+    df = df.sort_values(by="SortKey", kind="mergesort")
+    df.drop("SortKey",axis=1, inplace=True)
+
+    return df
 
 if __name__ == "__main__":
     print("Loading dfs...")
@@ -170,4 +178,4 @@ if __name__ == "__main__":
 
     print("Saving df...")
     df.to_csv(f"{dir}/Merge/data/merged_GreektoHeb.csv", index=False)
-    df.to_csv(f"{dir}/Merge/data/merged_HebtoGreek.csv", index=False)
+    df_hebtogk.to_csv(f"{dir}/Merge/data/merged_HebtoGreek.csv", index=False)
