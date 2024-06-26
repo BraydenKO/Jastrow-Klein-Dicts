@@ -66,6 +66,10 @@ def to_txt(df,fileName):
 """
     with open(f"{dir}/websites/{fileName}.html", 'w',encoding="utf-8") as file:
         file.write(html_content)
+    # Saves a duplication of the file for those who still use the old link.
+    # TODO: Remove this duplication
+    with open(f"{dir}/Merge/data/{fileName}.html", 'w',encoding="utf-8") as file:
+        file.write(html_content)
     return
 
 if __name__ == "__main__":
