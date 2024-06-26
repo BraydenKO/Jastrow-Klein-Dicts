@@ -50,12 +50,12 @@ def to_txt(df,fileName, is_gktoheb):
     html_content += f"<h2>by Brayden Kohler</h2>\n"
     if is_gktoheb:
         other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merged_HebtoGreek.html"
-        html_content += f"""<h7>sorted by Greek words in headword</h7>
-        click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Hebrew words."""
+        html_content += f"""<h7>sorted by Greek words in headword. </h7>
+        Click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Hebrew words."""
     else:
         other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merged_GreektoHeb.html"
-        html_content += f"""<h7>sorted by Hebrew words in headword</h7>
-        click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Greek words."""
+        html_content += f"""<h7>sorted by Hebrew words in headword.</h7>
+        Click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Greek words."""
 
     intro_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/intro.html"
     html_content += f"<h3><a href={intro_link}>Introduction and Selection Criteria</a></h3>\n"
