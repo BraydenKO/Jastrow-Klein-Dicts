@@ -18,7 +18,7 @@ def load_dfs(*filePaths):
         output.append(pd.read_csv(path))
     return output if len(output)>1 else output[0]
 
-def to_txt(df,fileName, is_gktoheb):
+def to_txt(df,fileName, is_gktoheb, is_index=False, is_sample=False):
     html_content = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -48,16 +48,16 @@ def to_txt(df,fileName, is_gktoheb):
     html_content += f"<h2>and Greek words in later Hebrew texts,</h2>\n"
     html_content += f"<h2>based on the Jastrow and Klein dictionaries</h2>\n"
     html_content += f"<h2>by Brayden Kohler</h2>\n"
-    if is_gktoheb:
-        other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merged_HebtoGreek.html"
+    if is_gktoheb and not is_sample:
+        other_version_link = r"https://braydenko.github.io/Jastrow-Klein-Dicts/websites/merged_HebtoGreek.html"
         html_content += f"""<h7>Sorted by Greek words in headword. </h7>
         Click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Hebrew words."""
-    else:
-        other_version_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/merged_GreektoHeb.html"
+    elif not is_gktoheb and not is_sample:
+        other_version_link = r"https://braydenko.github.io/Jastrow-Klein-Dicts/"
         html_content += f"""<h7>Sorted by Hebrew words in headword.</h7>
         Click <a href={other_version_link}>HERE</a> to see this lexicon sorted by the Greek words."""
 
-    intro_link = r"https://htmlpreview.github.io/?https://github.com/BraydenKO/Jastrow-Klein-Dicts/blob/master/websites/intro.html"
+    intro_link = r"https://braydenko.github.io/Jastrow-Klein-Dicts/websites/intro.html"
     html_content += f"<h3><a href={intro_link}>Introduction and Selection Criteria</a></h3>\n"
     html_content += "<br>\n"
     for idx, row in enumerate(df.iterrows()):
@@ -78,15 +78,15 @@ def to_txt(df,fileName, is_gktoheb):
 </body>
 </html>
 """
+    if is_index:
+      with open(f"{dir}/index.html", 'w',encoding="utf-8") as file:
+          file.write(html_content)
+      return
+    
     with open(f"{dir}/websites/{fileName}.html", 'w',encoding="utf-8") as file:
         file.write(html_content)
-    # Saves a duplication of the file for those who still use the old link.
-    # TODO: Remove this duplication
-    with open(f"{dir}/Merge/data/{fileName}.html", 'w',encoding="utf-8") as file:
-        file.write(html_content)
-    return
 
 if __name__ == "__main__":
     df_g2h, df_h2g = load_dfs(filePath_g2h,filePath_h2g)
-    to_txt(df_g2h, fileName_g2h, is_gktoheb=True)
+    to_txt(df_g2h, fileName_g2h, is_gktoheb=True, is_index=True)
     to_txt(df_h2g, fileName_h2g, is_gktoheb=False)
