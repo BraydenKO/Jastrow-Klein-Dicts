@@ -4,7 +4,7 @@ the Jastrow and Klein dictionaries as sources for each entry.
 
 This lexicon may be of use (although not limited) to those interested in:
 - The influence of Greek on Hebrew and Aramaic.
-- Understand the Greek language by way of its impact on other languages.
+- Understanding the Greek language by way of its impact on other languages.
 - Jastrow and Klein's spelling and use of Greek words in their dictionaries.
 
 **See the lexicon [here](https://braydenko.github.io/Jastrow-Klein-Dicts/)**
