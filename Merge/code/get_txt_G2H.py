@@ -42,6 +42,9 @@ def to_txt(df,fileName, is_gktoheb, is_index=False, is_sample=False):
         }}
     </style>
     <meta property="og:title" content="Lexicon of Rabbinic Greek" />
+    <meta property='og:image' content=""/>
+    <meta property='og:description' content="Lexicon of Hebrew and Aramaic words derived from Greek"/>
+    <meta property='og:url' content="https://braydenko.github.io/Jastrow-Klein-Dicts/"/>
 </head>
 <body style="padding-bottom: 30px;">
 """
