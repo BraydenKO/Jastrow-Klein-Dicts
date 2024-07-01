@@ -21,7 +21,7 @@ def load_dfs(*filePaths):
 def to_txt(df,fileName, is_gktoheb, is_index=False, is_sample=False):
     html_content = f"""
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: https://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,6 +41,7 @@ def to_txt(df,fileName, is_gktoheb, is_index=False, is_sample=False):
             height: 30px; 
         }}
     </style>
+    <meta property="og:title" content="Lexicon of Rabbinic Greek" />
 </head>
 <body style="padding-bottom: 30px;">
 """
