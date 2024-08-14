@@ -9,7 +9,7 @@ This lexicon may be of use (although not limited) to those interested in:
 
 **See the lexicon [here](https://braydenko.github.io/Jastrow-Klein-Dicts/)**
 
-This code in this repository was used to help generate this dictionary. Mind, however,that simply running these scripts will not create the same dictionary as some manual work went into its development.
+The code in this repository was used to help generate the lexicon. Mind, however,that simply running these scripts will not create the same dictionary as some manual work went into its development.
 
 ### Dictionaries used:
 - Jastrow, M. Dictionary of the Targumim, Talmud Bavli, Talmud Yerushalmi and Midrashic literature.
